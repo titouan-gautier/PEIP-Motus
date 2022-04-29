@@ -8,6 +8,8 @@ import (
         "strconv"
         "strings"
         "time"
+		"log"
+		"bufio"
 )
 
 func random(min, max int) int {
@@ -38,6 +40,8 @@ func main() {
         buffer := make([]byte, 1024)
         rand.Seed(time.Now().Unix())
 
+		
+
         for {
                 n, addr, err := connection.ReadFromUDP(buffer)
                 fmt.Print("-> ", string(buffer[0:n-1]))
@@ -55,4 +59,23 @@ func main() {
                         return
                 }
         }
+}
+
+func file_read(file string)(liste []string) {
+	
+	readFile, err := os.Open(file)
+
+	if err != nil {
+			log.Fatal(err)
+	}
+
+	fileScanner := bufio.NewScanner(readFile)
+	fileScanner.Split(bufio.ScanLines)
+
+	var lines []string
+	for fileScanner.Scan() {
+			lines = append(lines, fileScanner.Text())
+	}
+	readFile.Close()
+	return lines
 }
